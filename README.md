@@ -1,7 +1,6 @@
 <p align="center">
   <img src="images/persona-architect-banner.png" alt="Persona Architect Banner" width="100%" />
 </p>
-
 # Persona Architect
 
 🧠 Simulate intelligent AI personas with modular, prompt-based architecture using Python + NLP.
