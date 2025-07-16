@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Persona Architect</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      line-height: 1.6;
+      background-color: #fafafa;
+    }
+    img.banner {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    h1, h2 {
+      color: #2d2d2d;
+    }
+    code {
+      background: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="images/persona-architect-banner.png" alt="Persona Architect Banner" class="banner"/>
+
+  <h1>Persona Architect</h1>
+
+  <p><strong>A lightweight CLI-based AI assistant framework</strong> that supports memory, session saving, persona-driven response generation, and OpenAI integration (or offline stub mode).</p>
+
+  <h2>🎯 Features</h2>
+  <ul>
+    <li>CLI-based interface for interacting with your AI persona</li>
+    <li>Persona system with customizable tone, goals, and constraints</li>
+    <li>Session logging (stored with timestamped filenames)</li>
+    <li>Offline stub responses or real OpenAI integration</li>
+    <li>Modular design (easy to extend or plug into other tools)</li>
+  </ul>
+
+  <h2>📦 Project Structure</h2>
+  <ul>
+    <li><code>main.py</code> – Main entrypoint (interactive chat loop)</li>
+    <li><code>memory.py</code> – Tracks multi-turn dialogue context</li>
+    <li><code>session_saver.py</code> – Logs conversations with timestamps</li>
+    <li><code>prompt_builder.py</code> – Constructs persona-aware prompts</li>
+    <li><code>response_handler.py</code> – Stub/OpenAI response engine</li>
+  </ul>
+
+  <h2>🧠 Memory + Session Logging</h2>
+  <p>All dialogue is tracked and saved when the user exits via <code>exit</code> or <code>quit</code>. Session logs are timestamped and saved locally.</p>
+
+  <h2>🔧 To Run</h2>
+  <pre><code>python main.py</code></pre>
+
+  <h2>🔐 OpenAI Integration (Optional)</h2>
+  <p>To enable OpenAI response logic, set <code>USE_OPENAI = True</code> and insert your API key in <code>config.py</code>.</p>
+
+  <h2>📄 License</h2>
+  <p>This project is licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+</body>
+</html>
