@@ -1,0 +1,9 @@
+# Ignore config file containing sensitive keys
+config.py
+
+# Ignore Python cache and system files
+__pycache__/
+*.pyc
+
+# Ignore session logs (optional)
+session_*.txt
