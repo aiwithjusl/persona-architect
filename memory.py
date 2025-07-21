@@ -1,6 +1,6 @@
-"""
-memory.py
+# memory.py
 
+"""
 Handles conversation history by storing user and persona messages.
 Used to simulate memory during multi-turn dialogues and to support
 session saving at the end of the interaction.
@@ -8,26 +8,22 @@ session saving at the end of the interaction.
 
 class Memory:
     def __init__(self):
-        # Initialize an empty list to store the dialogue history
         self.history = []
 
     def add(self, speaker, message):
         """
-        Add a message to memory from the specified speaker.
-        Example: 'You: Hello there.'
+        Add a message to memory as a dictionary:
+        { "speaker": ..., "message": ... }
         """
-        self.history.append(f"{speaker}: {message}")
+        if not isinstance(speaker, str) or not isinstance(message, str):
+            raise ValueError("Speaker and message must be strings.")
+        self.history.append({"speaker": speaker, "message": message})
 
     def get_context(self):
         """
-        Return the full conversation as a single string,
-        formatted line by line in historical order.
+        Return the full conversation as a single string.
         """
-        return "\n".join(self.history)
+        return "\n".join(f"{entry['speaker']}: {entry['message']}" for entry in self.history)
 
     def clear(self):
-        """
-        Clear all stored conversation history.
-        Useful for resetting between sessions or personas.
-        """
         self.history = []
