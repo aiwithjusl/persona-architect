@@ -1,31 +1,82 @@
 """
-session_saver.py
+response_handler.py
 
-Handles saving the full conversation history to a timestamped text file.
-Each session is logged using the persona's name and current date/time.
+Handles response generation for Persona Architect.
+Supports both:
+- Offline stubbed response mode (for testing or demo use)
+- OpenAI API integration (for live LLM responses)
+
+Toggle `USE_OPENAI` to switch between modes.
 """
 
-import datetime
+# Toggle to True if using OpenAI's live API
+USE_OPENAI = False  # 🔁 Safe to keep off for development
 
-def save_session(persona_name, memory):
+def get_response(prompt):
     """
-    Saves the complete conversation to a local file.
+    Returns a response from either OpenAI or a stubbed fallback.
     
     Args:
-        persona_name (str): Name of the active persona
-        memory (Memory): Memory object containing the full dialogue
+        prompt (str): The full prompt built from persona traits + user input
     
-    Creates:
-        A .txt file with all dialogue history from the session
+    Returns:
+        str: AI-generated or stubbed response
     """
+    try:
+        if USE_OPENAI:
+            return get_openai_response(prompt)
+        else:
+            return get_stubbed_response(prompt)
+    except Exception as e:
+        print(f"[!] Error in get_response(): {e}")
+        return "⚠️ An error occurred while generating the response."
 
-    # Generate a timestamped filename
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = f"session_{persona_name}_{timestamp}.txt"
+def get_stubbed_response(prompt):
+    """
+    Stubbed (hardcoded) fallback response.
+    Useful for offline testing or demonstration.
+    """
+    try:
+        prompt_lower = prompt.lower()
+        if "science" in prompt_lower:
+            return "🔬 Based on scientific reasoning, we would need to test this with controlled variables."
+        elif "story" in prompt_lower or "once upon a time" in prompt_lower:
+            return "📖 Once upon a time, a curious mind asked a bold question, and a journey began..."
+        elif "minimal" in prompt_lower or "short" in prompt_lower:
+            return "✔️ Yes."
+        elif "friend" in prompt_lower or "happy" in prompt_lower:
+            return "😊 I'm here for you! What can I do to brighten your day?"
+        else:
+            return "🌿 Let’s take a moment to breathe. What would help you feel more at ease right now?"
+    except Exception as e:
+        print(f"[!] Error in get_stubbed_response(): {e}")
+        return "⚠️ An error occurred in the offline response system."
 
-    # Write the memory history to the file
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(memory.get_context())
+def get_openai_response(prompt):
+    """
+    Sends the constructed prompt to the OpenAI Chat API and returns the AI's response.
+    
+    ⚠️ Note:
+        - Requires an internet connection
+        - API key is securely loaded from config.py
+        - In production, replace with environment-based loading or secure key vault
+    """
+    try:
+        import openai
+        from config import OPENAI_API_KEY  # 🔐 Centralized API key management
 
-    # Confirm that the session was saved
-    print(f"\n[✔] Session saved to {filename}")
+        openai.api_key = OPENAI_API_KEY
+
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful AI assistant."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=250
+        )
+        return response['choices'][0]['message']['content']
+    except Exception as e:
+        print(f"[!] OpenAI API error: {e}")
+        return "⚠️ An error occurred while contacting the OpenAI API."
