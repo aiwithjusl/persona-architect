@@ -7,6 +7,7 @@ from config_loader import load_persona
 from log_importer import parse_log_file  # ✅ Updated
 
 AUTOSAVE = False
+AUTOSAVE_SUMMARY = False  # ✅ New toggle flag
 
 def list_personas():
     with open("persona_config.json", "r") as f:
@@ -52,6 +53,13 @@ def main():
             save_session(manager.current_persona["name"], manager.memory)
             break
 
+        if user_input.lower() == "/autosave_summary":
+            global AUTOSAVE_SUMMARY
+            AUTOSAVE_SUMMARY = not AUTOSAVE_SUMMARY
+            state = "enabled" if AUTOSAVE_SUMMARY else "disabled"
+            print(f"📝 Summary autosave {state}.\n")
+            continue
+
         if user_input.lower().startswith("/switch "):
             new_name = user_input.split(" ", 1)[1].strip()
             manager.switch(new_name)
@@ -62,6 +70,33 @@ def main():
             print("✅ Session saved.\n")
             continue
 
+        if user_input.lower().startswith("/history filter "):
+            keyword = user_input.split(" ", 2)[2].strip().lower()
+            print(f"\n📜 Filtered History for '{keyword}':")
+            matches = 0
+            for entry in manager.memory.history:
+                if (
+                    isinstance(entry, dict)
+                    and "speaker" in entry
+                    and "message" in entry
+                    and (keyword in entry["speaker"].lower() or keyword in entry["message"].lower())
+                ):
+                    print(f"{entry['speaker']}: {entry['message']}")
+                    matches += 1
+            if matches == 0:
+                print(f"❌ No entries found matching '{keyword}'")
+            else:
+                print(f"\n✅ {matches} entries matched '{keyword}'\n")
+            continue
+
+        if user_input.lower() == "/history count":
+            valid_entries = [
+                entry for entry in manager.memory.history
+                if isinstance(entry, dict) and "speaker" in entry and "message" in entry
+            ]
+            print(f"🧮 Total valid conversation entries: {len(valid_entries)}\n")
+            continue
+
         if user_input.lower() == "/history":
             print(f"\n📜 Conversation History ({manager.current_persona['name']}):")
             for entry in manager.memory.history:
@@ -69,6 +104,41 @@ def main():
                     print(f"{entry['speaker']}: {entry['message']}")
                 else:
                     print(f"⚠️ Skipping malformed entry: {entry}")
+            print()
+            continue
+
+        if user_input.lower() == "/summary":
+            print("📡 Generating summary of conversation...")
+            full_context = manager.memory.get_context()
+
+            if not full_context.strip():
+                print("⚠️ No messages to summarize.\n")
+                continue
+
+            summary_prompt = (
+                "System: You are a helpful assistant summarizing a conversation.\n"
+                "Task: Summarize the following conversation clearly, focusing on major points and tone.\n"
+                f"Conversation:\n{full_context}"
+            )
+
+            try:
+                summary = get_response(summary_prompt)
+                print("\n📌 Conversation Summary:\n" + summary + "\n")
+
+                if AUTOSAVE_SUMMARY:
+                    file_name = f"{manager.current_persona['name']}_summary.txt"
+                    with open(file_name, "a", encoding="utf-8") as f:
+                        f.write(f"\n==== Summary ({manager.current_persona['name']}): ====\n{summary}\n")
+                    print(f"💾 Summary saved to '{file_name}'\n")
+
+            except Exception as e:
+                print(f"❌ Failed to generate summary: {e}\n")
+            continue
+
+        if user_input.lower() == "/context":
+            print("\n🧠 Conversation Context Overview:")
+            context = manager.memory.get_context_summary()
+            print(context if context else "⚠️ No context available yet.")
             print()
             continue
 
@@ -136,16 +206,21 @@ def main():
         if user_input.lower() == "/help":
             print("""
 🛠 Available Commands:
-/help           – Show this help menu
-/exit or /quit  – Exit and save session
-/save           – Save current session
-/history        – View conversation history
-/reset          – Reset memory for current persona
-/switch <name>  – Switch to another persona
-/list           – Show available personas
-/traits [name]  – View current or specific persona's full traits
-/reload         – Reload current persona's config
-/importlog <file_path> – Import conversation log to memory
+/help                   – Show this help menu
+/exit or /quit          – Exit and save session
+/save                   – Save current session
+/history                – View conversation history
+/history filter <term>  – Filter history by keyword
+/history count          – Count valid conversation entries
+/summary                – Summarize conversation with AI
+/context                – Show last few conversation lines
+/reset                  – Reset memory for current persona
+/switch <name>          – Switch to another persona
+/list                   – Show available personas
+/traits [name]          – View current or specific persona's full traits
+/reload                 – Reload current persona's config
+/importlog <file_path>  – Import conversation log to memory
+/autosave_summary       – Toggle automatic saving of summaries
 """)
             continue
 
