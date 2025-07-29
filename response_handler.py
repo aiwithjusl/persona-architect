@@ -1,40 +1,42 @@
-"""
-response_handler.py
+# response_handler.py
 
+"""
 Handles response generation for Persona Architect.
-Supports both:
-- Offline stubbed response mode (for testing or demo use)
-- OpenAI API integration (for live LLM responses)
 
-Toggle `USE_OPENAI` to switch between modes.
+Supports:
+- Stubbed offline responses for testing
+- OpenAI API responses for production use
+
+Toggle `USE_OPENAI` to enable/disable API usage.
 """
 
-# Toggle to True if using OpenAI's live API
-USE_OPENAI = False  # 🔁 Safe to keep off for development
+USE_OPENAI = False  # 🔁 Safe to keep off for development/testing
 
 def get_response(prompt):
     """
-    Returns a response from either OpenAI or a stubbed fallback.
-    
+    Returns a response using either the OpenAI API or a stubbed fallback.
+
     Args:
-        prompt (str): The full prompt built from persona traits + user input
-    
+        prompt (str): The full prompt to send to the model.
+
     Returns:
-        str: AI-generated or stubbed response
+        str: The generated response.
     """
     try:
-        if USE_OPENAI:
-            return get_openai_response(prompt)
-        else:
-            return get_stubbed_response(prompt)
+        return get_openai_response(prompt) if USE_OPENAI else get_stubbed_response(prompt)
     except Exception as e:
         print(f"[!] Error in get_response(): {e}")
         return "⚠️ An error occurred while generating the response."
 
 def get_stubbed_response(prompt):
     """
-    Stubbed (hardcoded) fallback response.
-    Useful for offline testing or demonstration.
+    Fallback stubbed response logic for offline testing or demos.
+
+    Args:
+        prompt (str): The full prompt string.
+
+    Returns:
+        str: Hardcoded response based on prompt content.
     """
     try:
         prompt_lower = prompt.lower()
@@ -54,16 +56,21 @@ def get_stubbed_response(prompt):
 
 def get_openai_response(prompt):
     """
-    Sends the constructed prompt to the OpenAI Chat API and returns the AI's response.
-    
-    ⚠️ Note:
-        - Requires an internet connection
-        - API key is securely loaded from config.py
-        - In production, replace with environment-based loading or secure key vault
+    Sends the prompt to OpenAI's Chat API and returns the AI's response.
+
+    ⚠️ Requires:
+        - Internet connection
+        - A valid OpenAI API key (from config.py)
+
+    Args:
+        prompt (str): The prompt to send to the model.
+
+    Returns:
+        str: The response from OpenAI.
     """
     try:
         import openai
-        from config import OPENAI_API_KEY  # 🔐 Centralized API key management
+        from config import OPENAI_API_KEY  # 🔐 Secure API key management
 
         openai.api_key = OPENAI_API_KEY
 
@@ -76,7 +83,8 @@ def get_openai_response(prompt):
             temperature=0.7,
             max_tokens=250
         )
-        return response['choices'][0]['message']['content']
+
+        return response["choices"][0]["message"]["content"]
     except Exception as e:
         print(f"[!] OpenAI API error: {e}")
         return "⚠️ An error occurred while contacting the OpenAI API."
