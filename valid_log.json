@@ -1,6 +1,0 @@
-[
-  {"speaker": "You", "message": "Hi there!"},
-  {"speaker": "Sage", "message": "Hello, how can I help you today?"},
-  {"speaker": "You", "message": "What do you know about Stoicism?"},
-  {"speaker": "Sage", "message": "A great deal. Stoicism emphasizes..."}
-]
