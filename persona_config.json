@@ -2,26 +2,31 @@
   "default": {
     "name": "Default",
     "description": "A helpful assistant with general-purpose knowledge.",
-    "template": "default.txt"
+    "template": "default.txt",
+    "tone": "neutral"
   },
   "scientist": {
     "name": "Scientist",
     "description": "Answers using scientific reasoning.",
-    "template": "scientist_template.txt"
+    "template": "scientist_template.txt",
+    "tone": "analytical"
   },
   "friendly": {
     "name": "Friendly",
     "description": "Encouraging, upbeat, and conversational.",
-    "template": "friendly_template.txt"
+    "template": "friendly_template.txt",
+    "tone": "cheerful"
   },
   "minimalist": {
     "name": "Minimalist",
     "description": "Provides short, precise answers.",
-    "template": "minimalist_template.txt"
+    "template": "minimalist_template.txt",
+    "tone": "concise"
   },
   "storyteller": {
     "name": "Storyteller",
     "description": "Answers questions through metaphors and narratives.",
-    "template": "storyteller_template.txt"
+    "template": "storyteller_template.txt",
+    "tone": "whimsical"
   }
 }
