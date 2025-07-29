@@ -23,19 +23,22 @@ class Memory:
         """
         Return the full conversation as a single string.
         """
-        return "\n".join(f"{entry['speaker']}: {entry['message']}" for entry in self.history)
+        return "\n".join(
+            f"{entry['speaker']}: {entry['message']}"
+            for entry in self.history
+            if isinstance(entry, dict) and "speaker" in entry and "message" in entry
+        )
 
     def get_context_summary(self):
         """
         Return a short snippet of recent conversation (last 5 lines).
         """
-        if not self.history:
-            return ""
-        summary = []
-        for entry in self.history[-5:]:
-            if isinstance(entry, dict) and "speaker" in entry and "message" in entry:
-                summary.append(f"{entry['speaker']}: {entry['message']}")
-        return "\n".join(summary)
+        return "\n".join(
+            f"{entry['speaker']}: {entry['message']}"
+            for entry in self.history[-5:]
+            if isinstance(entry, dict) and "speaker" in entry and "message" in entry
+        )
 
     def clear(self):
+        """Clear the entire memory history."""
         self.history = []
