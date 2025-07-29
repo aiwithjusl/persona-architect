@@ -58,6 +58,7 @@ This mode is useful for previewing the CLI interface and basic functionality —
 
 Enables full AI response capability using your OpenAI API key. Required for realistic, persona-driven interaction.
 
+
 1. Create a config.py file in the root directory:
 
 OPENAI_API_KEY = "your-openai-api-key-here"
