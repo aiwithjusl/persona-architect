@@ -6,17 +6,24 @@
 
 🧠 Simulate intelligent AI personas with modular, prompt-based architecture using Python + NLP.
 
+---
+
 ## 🔍 Features
 
 Persona Architect allows you to:
+
 - Define AI personalities in a JSON config
-- Simulate realistic responses using OpenAI (or stub logic)
-- Track and save full conversations with memory
+- Load and switch between personas during runtime
+- Simulate responses using OpenAI (or offline stub logic)
+- Track and save full conversations with session history
 - Use for coaching, writing, training, or prototyping AI agents
+- Minimal CLI interface with modular file structure
+
+---
 
 ## 📂 Project Structure
 
-- `main.py` – CLI runner  
+- `main.py` – CLI runner and command interface  
 - `persona_config.json` – Persona definitions  
 - `prompt_builder.py` – Prompt construction logic  
 - `memory.py` – Tracks user + AI dialogue history  
@@ -24,30 +31,34 @@ Persona Architect allows you to:
 - `session_saver.py` – Saves session logs to timestamped file  
 - `templates/` – Prompt templates used per persona  
 
+---
+
 ## 🛠 Requirements
 
-To run with OpenAI API (optional):
+Only needed for live OpenAI mode:
 
 ```bash
 pip install openai
 
-🚀 How to Run
+---
 
-▶️ Offline Mode (Default)
+▶️ Offline Mode (Stub)
 
-No setup required — runs in stubbed mode with preset AI responses:
+Runs without internet or API key using a placeholder AI response for testing purposes only:
 
 python main.py
 
-Type your message and see your persona respond.
-Type exit or quit to end the session and auto-save your chat log.
+This mode is useful for previewing the CLI interface and basic functionality — but all personas will reply with the same default message.
 
+> ⚠️ To fully experience dynamic, intelligent persona simulation, OpenAI mode is required.
 
 ---
 
-🌐 Live OpenAI Mode (Optional)
+🌐 OpenAI Mode (Recommended)
 
-1. Create a config.py file in the project root:
+Enables full AI response capability using your OpenAI API key. Required for realistic, persona-driven interaction.
+
+1. Create a config.py file in the root directory:
 
 OPENAI_API_KEY = "your-openai-api-key-here"
 
@@ -55,12 +66,26 @@ OPENAI_API_KEY = "your-openai-api-key-here"
 
 USE_OPENAI = True
 
-3. Run the app again:
+3. Run the application:
 
 python main.py
 
- ⚠️ Important: Do not share or upload your API key publicly. Keep it local and secure.
+⚠️ Important: Never upload or share your API key publicly.
 
+---
+
+💾 Command List
+
+Interact with the AI using natural language or CLI commands:
+
+Command	Description
+
+/save	Saves the current session with timestamp
+/switch <name>	Switch to another persona (saves current first)
+/name <new_name>	Rename the current persona
+/list	List all available personas
+/delete	Deletes the current persona session
+/exit or /quit	Ends the session and saves conversation
 
 
 
@@ -69,5 +94,6 @@ python main.py
 📄 License
 
 MIT – Free to use and extend.
+
 
 ---
