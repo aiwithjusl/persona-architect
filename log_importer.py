@@ -1,10 +1,27 @@
-# log_importer.py
+"""
+log_importer.py
+
+Parses and validates a JSON log file containing a list of conversation entries.
+Each entry must include a 'speaker' and a 'message'.
+"""
 
 import json
 
 def parse_log_file(path):
+    """
+    Parse a conversation log file and validate its format.
+
+    Args:
+        path (str): Path to the log file.
+
+    Returns:
+        list: A list of validated conversation entries.
+
+    Raises:
+        Exception: If file is not found, invalid JSON, or improperly formatted.
+    """
     try:
-        with open(path, "r") as f:
+        with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         if not isinstance(data, list):
@@ -23,14 +40,14 @@ def parse_log_file(path):
 
         return validated
 
-    except FileNotFoundError:
-        raise Exception(f"File '{path}' not found.")
+    except FileNotFoundError as e:
+        raise Exception(f"❌ File '{path}' not found.") from e
 
-    except json.JSONDecodeError:
-        raise Exception(f"File '{path}' is not valid JSON.")
+    except json.JSONDecodeError as e:
+        raise Exception(f"❌ File '{path}' is not valid JSON.") from e
 
     except ValueError as ve:
-        raise Exception(f"Invalid log format: {ve}")
+        raise Exception(f"❌ Invalid log format: {ve}") from ve
 
     except Exception as e:
-        raise Exception(f"Unexpected error while importing: {e}")
+        raise Exception(f"❌ Unexpected error while importing log: {e}") from e
