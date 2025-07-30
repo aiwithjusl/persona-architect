@@ -37,6 +37,13 @@ Type your message and see your persona respond.
 
 To end a session, type `exit` or `quit`. Your full chat log will be saved locally.
 
+## 📞 Contact
+
+**Project Developer**: Justin Lane 
+- Email: aiwithjusl.dev@gmail.com
+- LinkedIn: Justin Lane (https://www.linkedin.com/in/justin-lane-69b960219)
+- GitHub: aiwithjusl (https://github.com/aiwithjusl/aiwithjusl)
+
 ## 📄 License
 
 MIT – Free to use and extend.
