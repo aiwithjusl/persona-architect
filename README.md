@@ -87,13 +87,12 @@ Command	Description
 /delete	Deletes the current persona session
 /exit or /quit	Ends the session and saves conversation
 
-## 📞 Contact
+## 👤 About the Author
 
-**Project Developer**: Justin Lane
-- Email: aiwithjusl.dev@gmail.com
-- LinkedIn: Justin Lane (https://www.linkedin.com/in/justin-lane-69b960219)
+Justin Lane 
 - GitHub: aiwithjusl (https://github.com/aiwithjusl/aiwithjusl)
-
+- LinkedIn: Justin Lane (https://www.linkedin.com/in/justin-lane-69b960219)
+- Email: aiwithjusl.dev@gmail.com
 ---
 
 📄 License
